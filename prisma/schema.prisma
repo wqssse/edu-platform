@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id        Int        @id @default(autoincrement())
+  number    Int        @unique
+  title     String
+  semesters Semester[]
+}
+
+model Semester {
+  id       Int       @id @default(autoincrement())
+  courseId Int
+  number   Int
+  course   Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  subjects Subject[]
+
+  @@unique([courseId, number])
+}
+
+model Subject {
+  id          Int        @id @default(autoincrement())
+  semesterId  Int
+  title       String
+  slug        String     @unique
+  description String?
+  semester    Semester   @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  materials   Material[]
+}
+
+model Material {
+  id          Int      @id @default(autoincrement())
+  subjectId   Int
+  category    String
+  title       String
+  description String?
+  filePath    String?
+  fileType    String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+
+model NewsItem {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id           Int    @id @default(autoincrement())
+  login        String @unique
+  passwordHash String
+}
