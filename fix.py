@@ -1,7 +1,12 @@
 f = "src/app/(public)/courses/[course]/[semester]/page.tsx"
-c = open(f, encoding="utf-8").read()
-if "import { MaterialCategory }" not in c:
-    open(f, "w", encoding="utf-8").write("import { MaterialCategory } from '@prisma/client'\n" + c)
-    print("Done!")
-else:
-    print("Already there")
+with open(f, encoding="utf-8") as file:
+    c = file.read()
+c = c.replace(
+    "import { MaterialCategory } from '@prisma/client'\n", ""
+).replace(
+    "Partial<Record<MaterialCategory, number>>",
+    "Partial<Record<string, number>>"
+)
+with open(f, "w", encoding="utf-8") as file:
+    file.write(c)
+print("Fixed!")
