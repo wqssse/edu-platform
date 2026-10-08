@@ -1,3 +1,4 @@
+import { MaterialCategory } from '@prisma/client'
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
